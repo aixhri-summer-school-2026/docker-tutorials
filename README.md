@@ -1,6 +1,13 @@
 # Docker & NVIDIA Container Toolkit on Ubuntu — Setup Guide
 
-This guide walks you through installing Docker on Ubuntu, verifying the installation with the classic `hello-world` image, then setting up the NVIDIA Container Toolkit so your containers can access your GPU.
+This guide walks you through installing Docker on Ubuntu, verifying the installation, and setting up the NVIDIA Container Toolkit so your containers can access your GPU's power.
+
+## 0. Introduction & Key Concepts
+
+### What are these tools?
+*   **The Terminal:** This is the text-based interface used to control your computer by typing commands. On Ubuntu, you can open it by pressing **`Ctrl + Alt + T`** or by searching for "Terminal" in your applications.
+*   **Docker:** A tool that allows you to package an application and its dependencies into an isolated "container." This ensures the software runs the same way on any machine.
+*   **NVIDIA Container Toolkit:** This acts as a "bridge" that allows Docker to see and use the computing power of your NVIDIA graphics card, which is essential for AI, deep learning, or 3D rendering.
 
 ---
 
@@ -8,43 +15,44 @@ This guide walks you through installing Docker on Ubuntu, verifying the installa
 
 - Ubuntu 20.04, 22.04, or 24.04 (64-bit)
 - A user account with `sudo` privileges
-- NVIDIA drivers already installed on the host (`nvidia-smi` should work on the host before proceeding)
+- NVIDIA drivers already installed on the host (the command `nvidia-smi` must work in your terminal before proceeding).
 
 ---
 
 ## 1. Install Docker
 
-> **Already have Docker installed?** You can skip this section entirely and jump straight to [Install the NVIDIA Container Toolkit](#3-install-the-nvidia-container-toolkit).
+> **Already have Docker installed?** Skip straight to [3. Install the NVIDIA Container Toolkit](#3-install-the-nvidia-container-toolkit).
 
-### 1.1 — Remove any old versions
+### 1.1 — Remove old versions
 
-Before installing, remove any previously installed versions of Docker:
+Before installing the official version, clean up any old Docker-related packages:
 
 ```bash
 sudo apt remove docker docker-engine docker.io containerd runc
 ```
 
-> **⚠️ Warning — existing data:** Uninstalling Docker **does not** automatically delete your existing images, containers, or volumes as long as you do not remove `/var/lib/docker/`. However, running `apt purge` or manually deleting that directory will permanently destroy all of them. If you have data worth keeping, see [Preserving existing Docker data](#preserving-existing-docker-data) below before proceeding.
+> **Note:** If you see an error like `E: Unable to locate package docker-engine`, this is **perfectly normal**. It simply means that specific package was not installed on your system. You can proceed to the next step.
+
+> **⚠️ Data Warning:** Uninstalling Docker does not delete your images or volumes as long as you do not delete the `/var/lib/docker/` directory. See the [Preserving existing Docker data](#preserving-existing-docker-data) section at the end of this guide.
 
 ### 1.2 — Install dependencies
 
 ```bash
 sudo apt update
-sudo apt install -y ca-certificates curl gnupg lsb-release
+sudo apt install -y ca-certificates curl gnupg
 ```
 
 ### 1.3 — Add Docker's official GPG key and repository
 
 ```bash
 sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
   https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
@@ -57,40 +65,32 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 
 ### 1.5 — (Optional) Run Docker without `sudo`
 
+By default, Docker requires administrator rights. To use it with your current user:
+
 ```bash
 sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-> **Note:** You may need to log out and back in for this to take full effect.
-
 ---
 
 ## 2. Verify the Docker Installation
 
-Pull and run the official `hello-world` image:
+Check if Docker is correctly installed by running the classic test image:
 
 ```bash
 docker run hello-world
 ```
 
-Expected output (abridged):
-
-```
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-...
-```
-
-If you see that message, Docker is up and running.
+If you see the message `"Hello from Docker!"`, everything is working correctly.
 
 ---
 
 ## 3. Install the NVIDIA Container Toolkit
 
-The NVIDIA Container Toolkit allows Docker containers to access the host's GPU(s) through the NVIDIA driver.
+The toolkit allows Docker containers to access the host's GPU.
 
-### 3.1 — Add the NVIDIA repository and GPG key
+### 3.1 — Configure the repository
 
 ```bash
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | \
@@ -108,107 +108,65 @@ sudo apt update
 sudo apt install -y nvidia-container-toolkit
 ```
 
-### 3.3 — Configure Docker to use the NVIDIA runtime
+### 3.3 — Configure the Docker runtime
+
+This command updates Docker's configuration to recognize the NVIDIA driver:
 
 ```bash
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 ```
 
-This updates `/etc/docker/daemon.json` to register the NVIDIA runtime and restarts the Docker daemon.
-
 ---
 
 ## 4. Test GPU Access Inside a Container
 
-### 4.1 — Quick smoke test with a minimal image
+### 4.1 — Quick smoke test
 
-The `nvidia/cuda` images ship with `nvidia-smi`. Pull a minimal one and run the tool directly:
-
-```bash
-docker run --rm --gpus all nvidia/cuda:12.3.0-base-ubuntu22.04 nvidia-smi
-```
-
-You should see your GPU listed with its driver version and CUDA version, for example:
-
-```
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 545.23.08    Driver Version: 545.23.08    CUDA Version: 12.3    |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-|   0  NVIDIA GeForce ...  Off  | 00000000:01:00.0  On |                  N/A |
-+-----------------------------------------------------------------------------+
-```
-
-> Adapt the image tag (`12.3.0-base-ubuntu22.04`) to match your driver's supported CUDA version. Check the [CUDA release notes](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/) or run `nvidia-smi` on the host to see the maximum supported CUDA version.
-
-### 4.2 — List all available GPUs
+We will use an official NVIDIA image to verify the GPU is visible from inside a container:
 
 ```bash
-docker run --rm --gpus all nvidia/cuda:12.3.0-base-ubuntu22.04 nvidia-smi -L
+docker run --rm --gpus all nvidia/cuda:12.6.0-base-ubuntu22.04 nvidia-smi
 ```
 
-Expected output:
+*Note: You can replace `12.6.0` with a different version depending on your needs.*
 
-```
-GPU 0: NVIDIA GeForce RTX 4090 (UUID: GPU-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
-```
+### 4.2 — Target a specific GPU
 
-### 4.3 — Target a specific GPU
-
-Use the `device` option to expose only one GPU to the container:
+If you have multiple GPUs and only want to assign one to the container (e.g., the first one, index 0):
 
 ```bash
-docker run --rm --gpus '"device=0"' nvidia/cuda:12.3.0-base-ubuntu22.04 nvidia-smi
+docker run --rm --gpus '"device=0"' nvidia/cuda:12.6.0-base-ubuntu22.04 nvidia-smi
 ```
 
 ---
 
 ## Preserving existing Docker data
 
-If you already have images, containers, or volumes on your machine and need to reinstall or upgrade Docker, follow these steps to avoid data loss.
+### Safety & Backup
+If you reinstall Docker, your data is stored in `/var/lib/docker/`.
 
-### Inventory what you have
+*   **`apt remove`**: Removes the software but keeps your images and volumes.
+*   **`apt purge`**: Deletes everything, including your configurations and data.
 
+To list your important volumes before making changes:
 ```bash
-docker images       # locally available images
-docker ps -a        # all containers (running or stopped)
-docker volume ls    # named volumes
+docker volume ls
 ```
 
-### Back up images you care about
-
-Export an image to a portable archive:
-
+To backup a custom image to a file:
 ```bash
-docker save my-image:tag -o my-image.tar
+docker save my-image:tag -o my-backup.tar
 ```
 
-Restore it after reinstalling Docker:
-
+And to restore it later:
 ```bash
-docker load -i my-image.tar
+docker load -i my-backup.tar
 ```
-
-### Safe reinstall — keep `/var/lib/docker/`
-
-All of Docker's data (images, containers, volumes) lives under `/var/lib/docker/`. As long as you **do not delete this directory** and avoid `apt purge`, Docker will rediscover its data automatically after reinstallation:
-
-```bash
-# Safe: removes binaries only, data directory is untouched
-sudo apt remove docker-ce docker-ce-cli containerd.io
-
-# Dangerous: wipes everything including /var/lib/docker
-# sudo apt purge docker-ce docker-ce-cli containerd.io
-# sudo rm -rf /var/lib/docker
-```
-
-### What gets destroyed if you purge
 
 | Resource | `apt remove` | `apt purge` / `rm -rf /var/lib/docker` |
 |---|---|---|
-| Docker binaries | ✅ removed | ✅ removed |
-| Images | ✅ kept | ❌ destroyed |
-| Containers | ✅ kept | ❌ destroyed |
-| Named volumes | ✅ kept | ❌ destroyed |
-| Custom networks | ✅ kept | ❌ destroyed |
+| Docker Binaries | ✅ Removed | ✅ Removed |
+| Images | ✅ Kept | ❌ Destroyed |
+| Containers | ✅ Kept | ❌ Destroyed |
+| Named Volumes | ✅ Kept | ❌ Destroyed |
