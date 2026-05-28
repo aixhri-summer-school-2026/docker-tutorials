@@ -1,7 +1,3 @@
-Here is the updated guide. I have modified the **Prerequisites** and added a new section (**Section 0.1**) explaining how to install the NVIDIA drivers if `nvidia-smi` is not working.
-
----
-
 # Docker & NVIDIA Container Toolkit on Ubuntu — Setup Guide
 
 This guide walks you through installing Docker on Ubuntu, verifying the installation, and setting up the NVIDIA Container Toolkit so your containers can access your GPU's power.
