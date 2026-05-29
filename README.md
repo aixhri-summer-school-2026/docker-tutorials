@@ -24,6 +24,8 @@ This guide walks you through installing Docker on Ubuntu, verifying the installa
 
 ## 0.1 — Installing NVIDIA Drivers (if needed)
 
+**Important Warning:** Driver installation and management is a critical system-level task. **We strongly recommend only experienced users attempt this**, as incorrect driver versions or installation methods can lead to system instability, boot loops, or display issues. If unsure, **seek advice from someone who has experience with Linux or GPU driver management**.
+
 If `nvidia-smi` does not work, you need to install the drivers on your host machine first.
 
 ### A. Detect your GPU and recommended driver
