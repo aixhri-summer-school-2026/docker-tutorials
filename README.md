@@ -1,4 +1,4 @@
-# Docker & NVIDIA Container Toolkit on Ubuntu — Setup Guide
+# Docker & NVIDIA Container Toolkit on Ubuntu - Setup Guide
 
 This guide walks you through installing Docker on Ubuntu, verifying the installation, and setting up the NVIDIA Container Toolkit so your containers can access your GPU's power.
 
@@ -14,16 +14,21 @@ This guide walks you through installing Docker on Ubuntu, verifying the installa
 
 ## Prerequisites
 
-- Ubuntu 20.04, 22.04, or 24.04 (64-bit).
+- Operating system: Ubuntu 20.04, 22.04, or 24.04 (64-bit) with an NVIDIA GPU.
 - A user account with `sudo` privileges.
 - **NVIDIA Drivers:** These must be installed. Test this by typing `nvidia-smi` in your terminal. 
-    *   *If it works:* You’ll see a table with GPU details (model, driver version, temperature, memory usage, etc.). Proceed to Section 1.
-    *   *If it fails (e.g., "command not found" or "no devices found"):* Follow Section 0.1 below.
+    *   *If it works:* You should see a table with GPU details. If so, proceed to [Section 1](#1-install-docker).
+    <p style="text-align: left;">
+      <img src="docs/images/nvidia-smi-success.png" width="400" alt="nvidia-smi output">
+      <br>
+      <em>Figure 1 - Expected output of nvidia-smi.</em>
+    </p>
+    
+    *   *If it fails (e.g., "command not found" or "no devices found"):* Follow [Section 0.1](#01---installing-nvidia-drivers-if-needed) below
 
 ---
 
-## 0.1 — Installing NVIDIA Drivers (if needed)
-
+## 0.1 - Installing NVIDIA Drivers (if needed)
 **Important Warning:** Driver installation and management is a critical system-level task. **We strongly recommend only experienced users attempt this**, as incorrect driver versions or installation methods can lead to system instability, boot loops, or display issues. If unsure, **seek advice from someone who has experience with Linux or GPU driver management**.
 
 If `nvidia-smi` does not work, you need to install the drivers on your host machine first.
@@ -33,8 +38,15 @@ Run the following command to see which driver is recommended for your hardware:
 ```bash
 ubuntu-drivers devices
 ```
-Look for the line that says `vendor : NVIDIA Corporation` and identifies a driver as `recommended`.
 
+Look for the line that identifies a driver as `recommended` with the vendor being NVIDIA Corporation.
+
+<p style="text-align: left;">
+  <img src="docs/images/ubuntu-driver-installation.png" width="400" alt="nvidia-smi output">
+  <br>
+  <em>Figure 2 - Output of ubuntu-drivers devices showing a recommended NVIDIA driver.</em>
+</p>
+    
 ### B. Install the driver
 You can either install the recommended one automatically:
 ```bash
@@ -59,23 +71,27 @@ nvidia-smi
 ```
 If you see a table showing your GPU name and driver version, you are ready to proceed to Section 1.
 
+If not, check the official ubuntu documentation for troubleshooting: https://ubuntu.com/server/docs/how-to/graphics/install-nvidia-drivers/
+
 ---
 
 ## 1. Install Docker
-
-### 1.1 — Remove old versions
+Open your terminal and run these commands:
+### 1.1 - Remove old versions
 ```bash
 sudo apt remove docker docker-engine docker.io containerd runc
 ```
 > **Note:** If you see `E: Unable to locate package docker-engine`, it's normal. It just means it wasn't there.
 
-### 1.2 — Install dependencies
+### 1.2 - Install dependencies
+Refresh the package lists, then install essential tools: trusted SSL certificates, curl for HTTP requests, and gnupg for verifying cryptographic signatures:
 ```bash
 sudo apt update
 sudo apt install -y ca-certificates curl gnupg
 ```
 
-### 1.3 — Add Docker's official GPG key and repository
+### 1.3 - Add Docker's official GPG key and repository
+Create a trusted key storage folder, download Docker’s GPG signing key, and add Docker’s official repository for your Ubuntu version:
 ```bash
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -88,13 +104,15 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
-### 1.4 — Install Docker Engine
+### 1.4 - Install Docker Engine
+Refresh the package indexes, then install Docker Engine, its CLI, the container runtime, and useful plugins:
 ```bash
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-### 1.5 — (Optional) Run Docker without `sudo`
+### 1.5 - Run Docker without `sudo`
+Add your current user to the docker group to run commands without sudo, then start a new shell session to apply the changes:
 ```bash
 sudo usermod -aG docker $USER
 newgrp docker
@@ -103,17 +121,26 @@ newgrp docker
 ---
 
 ## 2. Verify the Docker Installation
-
+Run the following command to test your Docker installation:
 ```bash
 docker run hello-world
 ```
-If you see `"Hello from Docker!"`, Docker is working.
+If you see `"Hello from Docker!"`, like in this image, Docker is working.
+<p style="text-align: left;">
+  <img src="docs/images/docker-hello-world-success.png" width="450" alt="nvidia-smi output">
+  <br>
+  <em>Figure 3 - Expected output of docker run hello-world.</em>
+</p>
+
+If you get an error when running Docker (like permission denied or “cannot connect to the Docker daemon”), it’s very likely because you skipped step 1.5. 
+If you still get an error, check the official Docker documentation for troubleshooting: https://docs.docker.com/desktop/setup/install/linux/
 
 ---
 
 ## 3. Install the NVIDIA Container Toolkit
 
-### 3.1 — Configure the repository
+### 3.1 - Configure the repository
+Add NVIDIA’s GPG key and configure APT to trust packages from the NVIDIA Container Toolkit repository:
 ```bash
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | \
   sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
@@ -123,13 +150,15 @@ curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-contai
   sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 ```
 
-### 3.2 — Install the toolkit
+### 3.2 - Install the toolkit
+Refresh the package lists, then install NVIDIA’s container runtime tools to enable GPU support:
 ```bash
 sudo apt update
 sudo apt install -y nvidia-container-toolkit
 ```
 
-### 3.3 — Configure the Docker runtime
+### 3.3 - Configure the Docker runtime
+Configure Docker to use the NVIDIA container runtime so containers can access the GPU, then restart Docker to apply the changes:
 ```bash
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
@@ -139,26 +168,35 @@ sudo systemctl restart docker
 
 ## 4. Test GPU Access Inside a Container
 
-### 4.1 — Quick smoke test
+### 4.1 - Quick smoke test
+Run the following command to test if your container can see your GPU:
 ```bash
 docker run --rm --gpus all nvidia/cuda:12.6.0-base-ubuntu22.04 nvidia-smi
 ```
 
-### 4.2 — Target a specific GPU
+If everything is correctly installed, you should see your GPU information displayed (similar to Fig. 3).
+<p style="text-align: left;">
+  <img src="docs/images/docker-nvidia-smi-success.png" width="450" alt="nvidia-smi output">
+  <br>
+  <em>Figure 4 - Expected output of nvidia-smi inside a Docker container.</em>
+</p>
+
+
+### 4.2 - Target a specific GPU
+Run this command to force the container to use only GPU 0. You should see the same nvidia-smi output, but restricted to the selected device:
 ```bash
 docker run --rm --gpus '"device=0"' nvidia/cuda:12.6.0-base-ubuntu22.04 nvidia-smi
 ```
 
 ---
 
-## Preserving existing Docker data
+## 5. Conclusion
 
-| Resource | `apt remove` | `apt purge` / `rm -rf /var/lib/docker` |
-|---|---|---|
-| Docker Binaries | ✅ Removed | ✅ Removed |
-| Images | ✅ Kept | ❌ Destroyed |
-| Containers | ✅ Kept | ❌ Destroyed |
-| Named Volumes | ✅ Kept | ❌ Destroyed |
+You now have a fully working environment with:
 
-*To backup an image:* `docker save my-image:tag -o backup.tar`  
-*To restore an image:* `docker load -i backup.tar`
+- Docker installed and running  
+- NVIDIA drivers configured on your host  
+- NVIDIA Container Toolkit enabled  
+- GPU access verified inside containers  
+
+This setup allows you to run GPU-accelerated workloads such as AI inference, machine learning training, and CUDA-based applications directly inside Docker containers.
