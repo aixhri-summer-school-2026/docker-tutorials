@@ -13,8 +13,8 @@ Make sure your system meets the following requirements:
 - **Operating system**: Ubuntu 20.04, 22.04, or 24.04 (64-bit). If you are using another Linux distribution or another OS (Windows, macOS), we cannot guarantee that all practical sessions will work correctly on your machine.
 - **Storage space**: ~20 GB available
 - **Tools**: Git & Docker installed
-- **GPU users**: Docker configured with NVIDIA support  
-  see: [`docker-tutorials/nvidia-docker-setup`](./docker-tutorials/nvidia-docker-setup)
+- **If you have a GPU**: Docker configured with NVIDIA support  
+  see: [`nvidia-docker-setup`](./nvidia-docker-setup)
 
 ---
 
