@@ -1,50 +1,60 @@
 # Tutorial 06 : PPO Locomotion
 
-This README provides a step-by-step guide on how to retrieve the project code, download the necessary Docker image, run the isolated container, and ensure that graphical environments (like Reinforcement Learning simulations) render correctly on your screen.
+This README explains how to retrieve the project code, download the required Docker image, and run the container in an isolated environment.
 
-# 1. Prerequisites
+# 1. Download the code
 
-To ensure a smooth and reproducible experience without installing complex dependencies directly on your host machine, this project relies on Docker. Docker creates an isolated environment (a "container") where all the required libraries and tools are already configured.
-
-Before starting, verify that both Docker and Docker Compose are installed and running on your system.
-
-Open your terminal and run the following commands:
-
-```bash
-docker --version
-docker compose version
-```
-
-# 2. Download the code
-
-Next, you need to download the repository containing the configuration files and the code for the Summer School.
-
-We use git to clone the repository from GitHub to your local machine, and then we navigate into the newly created folder:
+You need to download the repository containing the configuration files and the code for the practical session. We use Git to clone the repository from GitHub to your local machine:
 
 ```bash
 git clone https://github.com/TheoBounac/SUMMER-SCHOOL-RL.git
 cd SUMMER-SCHOOL-RL
 ```
 
-# 3. Authorize Graphical Display (GUI Forwarding)
-
-Reinforcement Learning (RL) projects often require a graphical interface to render environments and watch the agents learn (e.g., viewing a simulated robot or a game screen). Because Docker containers run in strict isolation, they do not have direct permission to open windows on your host computer's screen.
-To fix this, we need to grant the Docker container permission to communicate with your machine's X11 display server.
+# 2. Download the image
 
 Run the following command:
 
+```bash
+docker pull aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_06_Reinforcement_Learning_Go2
+```
+It downloads the pre-built environment on your local machine that contains all the librairies, dependencies and tools for the practical session.
+
+## 2.1 Verify that the image has been pulled
+
+You can run:
+```bash
+docker image ls aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_06_Reinforcement_Learning_Go2
+```
+You should see output similar to the following:
+<p style="text-align: left;">
+  <img src="../docs/images/docker-pull-06.png" width="1000">
+  <br>
+</p>
+
+You can now download the next practical session: [Tutorial_07_PoseAction](../Tutorial_07_PoseAction)
+
+---
+
+# 3. Starting the Practical Session
+
+## 3.1 - Enable graphical display (X11)
+
+Before launching the container, you need to grant Docker permission to connect to your local display. This is required to open windows for graphical applications like MuJoCo, mjlab, and Pygame. 
+Run this command:
 ```bash
 xhost +local:docker
 ```
-xhost: A utility to control access to the X server (your display).
-+local:docker: Explicitly grants permission to local Docker containers to connect to your display and open graphical windows. (Note: This step is primarily for Linux users. Windows/macOS users may need additional tools like VcXsrv or XQuartz).
 
-# 4. Run the Docker Container
+## 3.2 Launch the container
 
-Now that the code is downloaded and the display permissions are set, you can launch the container. Docker Compose will read the configuration file, automatically download (pull) the required image if you don't have it yet, and start the environment.
-
-Run the following command:
-
+Now, start the interactive session using Docker Compose:
 ```bash
 docker compose -f docker/docker-compose.yml run --rm summer-school-rl
 ```
+
+You should now be inside the Docker container! Your terminal prompt will change to reflect this.
+<p style="text-align: left;">
+  <img src="../docs/images/launch-container-06.png" width="1000">
+  <br>
+</p>
