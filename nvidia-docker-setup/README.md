@@ -75,7 +75,7 @@ If not, check the official ubuntu documentation for troubleshooting: https://ubu
 
 ---
 
-## 1. Install Docker
+## 1. Install Git & Docker
 Open your terminal and run these commands:
 ### 1.1 - Remove old versions
 ```bash
@@ -84,10 +84,10 @@ sudo apt remove docker docker-engine docker.io containerd runc
 > **Note:** If you see `E: Unable to locate package docker-engine`, it's normal. It just means it wasn't there.
 
 ### 1.2 - Install dependencies
-Refresh the package lists, then install essential tools: trusted SSL certificates, curl for HTTP requests, and gnupg for verifying cryptographic signatures:
+Refresh the package lists, then install essential tools: Git to clone repositories, trusted SSL certificates, curl for HTTP requests, and gnupg for verifying cryptographic signatures:
 ```bash
 sudo apt update
-sudo apt install -y ca-certificates curl gnupg
+sudo apt install -y ca-certificates curl gnupg git util-linux-extra
 ```
 
 ### 1.3 - Add Docker's official GPG key and repository
@@ -121,7 +121,14 @@ newgrp docker
 ---
 
 ## 2. Verify the Docker Installation
-Run the following command to test your Docker installation:
+First, check that Docker and Docker Compose are correctly installed by printing their versions:
+
+```bash
+docker --version
+docker compose version
+```
+
+Then, run the following command to test your Docker installation:
 ```bash
 docker run hello-world
 ```
