@@ -1,6 +1,7 @@
 # Tutorial 08 : Gemini Robotics
 
-This README explains how to retrieve the project code, download the required Docker image, and run the container in an isolated environment.
+## 🚧 Under Construction
+This tutorial is currently being developed and is not yet complete.
 
 <!-- # 1. Download the code
 

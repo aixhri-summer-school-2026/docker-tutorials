@@ -24,7 +24,7 @@ It downloads the pre-built environment on your local machine that contains all t
 
 You can run:
 ```bash
-docker image ls aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_06_Reinforcement_Learning_Go2
+docker image ls aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_02_Chat_with_your_robot
 ```
 <!-- You should see output similar to the following:
 <p style="text-align: left;">
