@@ -7,8 +7,8 @@ This README explains how to retrieve the project code, download the required Doc
 You need to download the repository containing the configuration files and the code for the practical session. We use Git to clone the repository from GitHub to your local machine:
 
 ```bash
-git clone https://github.com/TheoBounac/SUMMER-SCHOOL-RL.git
-cd SUMMER-SCHOOL-RL
+git clone https://github.com/aixhri-summer-school-2026/Tutorial_06_RL_Locomotion
+cd Tutorial_06_RL_Locomotion
 ```
 
 # 2. Download the image
