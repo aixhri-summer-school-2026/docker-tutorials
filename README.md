@@ -30,7 +30,7 @@ For each practical session, go to the corresponding folder and follow the instru
 | Tutorial | Folder | Description |  Status |
 |----------|--------|-------------|---------|
 | 1 | [Tutorial_01_Finetuning_LLM](./Tutorial_01_Finetuning_LLM) | Fine-tuning a LLM | 🚧 Building |
-| 2 | [Tutorial_02_Chat_with_your_robot](./Tutorial_02_Chat_with_your_robot) | Using LLM/VLM to interact with a robot | ✅ OK |
+| 2 | [Tutorial_02_Chat_with_your_robot](./Tutorial_02_Chat_with_your_robot) | Using LLM/VLM to interact with a robot | 🚧 Building |
 | 3 | [Tutorial_03_Flow_Matching](./Tutorial_03_Flow_Matching) | Flow Matching | 🚧 Building |
 | 4 | [Tutorial_04_FlowerVLA](./Tutorial_04_FlowerVLA) | FlowerVLA | 🚧 Building |
 | 5 | [Tutorial_05_RL_Human_Feedback](./Tutorial_05_RL_Human_Feedback) | RL with human feedback | ✅ OK |
