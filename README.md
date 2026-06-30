@@ -45,7 +45,7 @@ cd ..
 ```
 
 ### Updating repositories
-Depending on the tutorial and when you ran the setup, you may need to update the repositories manually. To do so, go into the relevant tutorial folder and run:
+Depending on the tutorial and when you ran the setup, you may need to update the repositories manually at the beginning of the practical session. To do so, go into the relevant tutorial folder and run:
 ```bash
 git pull
 ```
