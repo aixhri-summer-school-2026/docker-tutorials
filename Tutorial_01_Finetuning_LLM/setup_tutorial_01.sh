@@ -7,8 +7,8 @@ TARGET_DIR="${1:-.}"
 # Pull the image
 docker pull aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_01_Finetuning_LLM
 
-# # Rename the image
-# docker tag aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_01_Finetuning_LLM reachy-mini-2404
+# Rename the image
+docker tag aixhrisummerschool2026/aixhri-summer-school-2026:Tutorial_01_Finetuning_LLM finetuning_llm
 
 # # Clone the repository
 # REPO_URL="https://github.com/aixhri-summer-school-2026/Tutorial_01_Finetuning_LLM.git"
