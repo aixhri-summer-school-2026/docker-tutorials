@@ -29,8 +29,12 @@ git clone https://github.com/aixhri-summer-school-2026/docker-tutorials.git
 cd docker-tutorials
 ```
 
-The script [`run_all_setup.sh`](./run_all_setup.sh) is used to automatically execute all individual setup scripts (`setup_tutorial_??.sh`).
-It requires one argument: the path to the directory where all Git repositories will be cloned. If you provide a custom path, make sure to include the trailing `/` at the end.
+The script [`run_all_setup.sh`](./run_all_setup.sh) lets you choose between two options:
+
+1. **Download all tutorials at once** – it automatically executes every individual setup script (`setup_tutorial_??.sh`).
+2. **Download tutorials one by one** – you can run the corresponding `setup_tutorial_??.sh` script inside each tutorial folder.
+
+`run_all_setup.sh` requires one argument: the path to the directory where all Git repositories will be cloned. If you provide a custom path, make sure to include the trailing `/` at the end.
 
 Before running it, make it executable:
 ```bash

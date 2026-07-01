@@ -1,5 +1,7 @@
 # Tutorial 05 : RL with Human Feedback
 
+> It is **recommended** to use the `run_all_setup.sh` script (located in the root of `docker-tutorials`) to download the entire codebase. If you prefer to download only this tutorial individually, you can instead run the `setup_tutorial_??.sh` script provided inside the tutorial folder.
+
 Make sure you have cloned this repository and are currently inside the correct directory:
 ```bash
 cd docker-tutorials/Tutorial_05_RL_Human_Feedback
