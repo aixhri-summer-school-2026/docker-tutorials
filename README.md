@@ -11,7 +11,7 @@ We ask you to download all practical sessions **before the start of the event** 
 Please make sure your system meets the following requirements. Otherwise, we cannot guarantee that all practical sessions will run correctly on your machine. If you encounter any issues while installing the images, please contact us.
 
 - **Operating system**: Ubuntu 20.04, 22.04, or 24.04 (64-bit).
-- **Storage space**: ~100 GB available
+- **Storage space**: ~150 GB available
 - **Tools**: Docker configured with NVIDIA support & Git installed  
   see: [`nvidia-docker-setup`](./nvidia-docker-setup)
 
@@ -63,13 +63,13 @@ The table below shows the status of each tutorial, indicating whether it has bee
 | Tutorial | Folder | Description |  Status |
 |----------|--------|-------------|---------|
 | 1 | [Tutorial_01_Finetuning_LLM](./Tutorial_01_Finetuning_LLM) | Fine-tuning a LLM | 🚧 Building |
-| 2 | [Tutorial_02_Chat_with_your_robot](./Tutorial_02_Chat_with_your_robot) | Using LLM/VLM to interact with a robot | 🚧 Building |
+| 2 | [Tutorial_02_Chat_with_your_robot](./Tutorial_02_Chat_with_your_robot) | Using LLM/VLM to interact with a robot | ✅ OK |
 | 3 | [Tutorial_03_Flow_Matching](./Tutorial_03_Flow_Matching) | Flow Matching | 🚧 Building |
 | 4 | [Tutorial_04_FlowerVLA](./Tutorial_04_FlowerVLA) | FlowerVLA | 🚧 Building |
 | 5 | [Tutorial_05_RL_Human_Feedback](./Tutorial_05_RL_Human_Feedback) | RL with human feedback | ✅ OK |
 | 6 | [Tutorial_06_PPO_Locomotion](./Tutorial_06_PPO_Locomotion) | PPO & expressive locomotion | ✅ OK |
-| 7 | [Tutorial_07_PoseAction](./Tutorial_07_PoseAction) | Hand & person tracking | ✅ OK |
+| 7 | [Tutorial_07_PoseAction](./Tutorial_07_PoseAction) | Hand & person tracking | 🚧 Building |
 | 8 | [Tutorial_08_Gemini_Robotics](./Tutorial_08_Gemini_Robotics) | Gemini Robotics tutorial | 🚧 Building |
-| 9 | [Tutorial_09_Social_Robot_Navigation](./Tutorial_09_Social_Robot_Navigation) | Social navigation | ✅ OK |
+| 9 | [Tutorial_09_Social_Robot_Navigation](./Tutorial_09_Social_Robot_Navigation) | Social navigation | 🚧 Building |
 
 ---
