@@ -15,11 +15,11 @@ chmod +x setup_tutorial_06.sh
 
 Run the setup script and specify the destination directory where the tutorial should be installed. The script will automatically create the target directory if it does not exist and set up all the required files.
 ```bash
-./setup_tutorial_07.sh <path_to_directory>/Tutorial_06_RL_Locomotion
+./setup_tutorial_06.sh <path_to_directory>/Tutorial_06_RL_Locomotion
 ```
 For example:
 ```bash
-./setup_tutorial_07.sh ~/aixhri-summer-school/Tutorial_06_RL_Locomotion
+./setup_tutorial_06.sh ~/aixhri-summer-school/Tutorial_06_RL_Locomotion
 ```
 
 ## 2. Run the tutorial
