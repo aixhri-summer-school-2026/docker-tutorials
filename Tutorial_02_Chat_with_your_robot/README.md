@@ -2,14 +2,15 @@
 
 ## 1. Dowload the tutorial
 
-> It is **recommended** to use the `run_all_setup.sh` script (located in the root of `docker-tutorials`) to download the entire codebase. If you prefer to download only this tutorial individually, you can instead run the `setup_tutorial_??.sh` script provided inside the tutorial folder.
+> It is **recommended** to use the [`run_all_setup.sh`](./run_all_setup.sh) script to download the entire codebase. If you prefer to download only this tutorial, you can instead follow the instructions below.
 
-Make sure you have cloned this repository and are currently inside the correct directory:
+If you haven't already, clone this repository and navigate to the tutorial directory:
 ```bash
+git clone https://github.com/aixhri-summer-school-2026/docker-tutorials.git
 cd docker-tutorials/Tutorial_02_Chat_with_your_robot
 ```
 
-Make the setup script executable:
+Make the tutorial setup script executable:
 ```bash
 chmod +x setup_tutorial_02.sh
 ```
